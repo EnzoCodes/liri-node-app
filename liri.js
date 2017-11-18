@@ -1,6 +1,15 @@
-var iGotKeys = require("./keys.js");
-var request = require("request");
+var keys = require("./keys.js");
 
+var request = require("request");
+// var twitreq = require("twitter");
+var twitterKeys = require("./keys.js").twitterKeys;
+// var spotreq = require("node-spotify-api");
+// var spotKeys = new spotreq(keys.spotifyKeys);
+var spotKeys = require("./keys.js").spotifyKeys;
+
+var fs = require("fs");
+
+// Grabbing keyword to activate correct script in switch.
 var arr = process.argv[2];
 
 switch (arr) {
@@ -27,10 +36,22 @@ switch (arr) {
 
 
 function tweets(){
-
-};
+    // statuses/show/:id
+    //twitter .get()
+    twitterKeys.get('favorites/list', function(tweets, res){
+        console.log(tweets);
+        console.log(res);
+    });
+}
 
 function spotify(){
+//   Artist(s)
+//
+// The song's name
+//
+// A preview link of the song from Spotify
+//
+// The album that the song is from
 
 };
 
@@ -63,13 +84,3 @@ function movie(){
 function doIt(){
 
 };
-// request("http://www.omdbapi.com/?t=remember+the+titans&y=&plot=short&apikey=trilogy", function(error, response, body) {
-//
-//   // If the request is successful (i.e. if the response status code is 200)
-//   if (!error && response.statusCode === 200) {
-//
-//     // Parse the body of the site and recover just the imdbRating
-//     // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
-//     console.log("The movie's rating is: " + JSON.parse(body).imdbRating);
-//   }
-// });
