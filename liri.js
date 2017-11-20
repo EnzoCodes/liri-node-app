@@ -18,7 +18,7 @@ switch (arr) {
     tweets();
     break;
 
-    case "spotify-this-song":
+    case "spotify":
     console.log("Music time!");
     spotify();
     break;
@@ -44,30 +44,76 @@ function tweets(){
             }
             if (!error) {
                 for(i = 0; i < 20; i++){
-                    console.log("Tweet " + (i+1)   + ": " + tweets[i].text);
+                    console.log("Tweet " + (i+1)   + ": " + tweets[i].text + "\n");
             }
         }
     })
 };
 
 function spotify(){
-//   Artist(s)
-//
-// The song's name
-//
-// A preview link of the song from Spotify
-//
-// The album that the song is from
+    console.log("Let's hear it!");
+    var input = process.argv;
+    var song = input.splice(3).join(" ");
+    console.log(song);
 
-};
+    // If nothing is entered...
+        if (!song) {
+            keys.spotifyKeys.search({ type: 'track', query: 'Toxic', limit: 1 }, function(error, data) {
+                //Logging error message.
+                if (error) {
+                    console.log("Something went wrong!")
+                    console.log(error);
+                    return
+                }
+                var sInfo = "\n Song: " + JSON.stringify(data.tracks.items[0].name, null, 2)
+                            + "\n Artist: " + JSON.stringify(data.tracks.items[0].artists[0].name, null, 2)
+                            + "\n Album: " + JSON.stringify(data.tracks.items[0].album.name, null, 2)
+                            + "\n Url: " + JSON.stringify(data.tracks.items[0].external_urls.spotify, null, 2) + "\n";
+                console.log(sInfo);
+            });
+        } else {
+            keys.spotifyKeys.search({ type: 'track', query: song, limit: 1 }, function(error, data) {
+                // //Logging error message.
+                if (error) {
+                    console.log("Something went wrong!")
+                    console.log(error);
+                    return
+                }
+
+                var sInfo = "\n Song: " + JSON.stringify(data.tracks.items[0].name, null, 2)
+                            + "\n Artist: " + JSON.stringify(data.tracks.items[0].artists[0].name, null, 2)
+                            + "\n Album: " + JSON.stringify(data.tracks.items[0].album.name, null, 2)
+                            + "\n Url: " + JSON.stringify(data.tracks.items[0].external_urls.spotify, null, 2) + "\n";
+
+                console.log(sInfo);
+                // fs.append()
+            });
+        }
+}; //End Spotify stuff
+
+// https.get(dir, function (response){
+//   var str = '';
+//   response.setEncoding('utf8');
+//   response.on('data', function (data){
+//     str += data;
+//   });
+//   response.on('end', function (){
+//     var jObj = JSON.parse(str);
+//     console.log(jObj);
+//   });
+// })
+
+
 
 function movie(){
 
-    var movieName = process.argv;
-    movieName.splice(0,3)
-    movieName = movieName.join("+");
+    if(process.argv[3] === undefined) {
+        movieName = "Mr. Nobody";
+    } else {
+        var input = process.argv;
+        var movieName = input.splice(3).join(" ");
+    }
 
-    // Then run a request to the OMDB API with the movie specified
     var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
 
     request(queryUrl, function(error, response, body) {
@@ -75,18 +121,30 @@ function movie(){
       if (!error && response.statusCode === 200) {
         // Parse the body of the site and recover just the imdbRating
         // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
-        console.log("Title: " + JSON.parse(body).Title);
+        console.log("\n Title: " + JSON.parse(body).Title);
         console.log("Released: " + JSON.parse(body).Year);
         console.log("IMDB Rating: " + JSON.parse(body).imdbRating);
         console.log("Rotten Tomatoes Rating: " + JSON.parse(body).Ratings[1].Value);
         console.log("Country: " + JSON.parse(body).Country);
         console.log("Language: " + JSON.parse(body).Language);
         console.log("Short Plot: " + JSON.parse(body).Plot);
-        console.log("Actors: " + JSON.parse(body).Actors);
+        console.log("Actors: " + JSON.parse(body).Actors + "\n");
       }
     });
 };
 
 function doIt(){
-
+    console.log("This feature is under development...sorry mate.");
+//     fs.readFile("searchData.txt", "utf8," function(error, data){
+//         if (error) {
+//             console.log("Something went wrong!");
+//             return console.log(error);
+//         }
+//
+//         console.log(data);
+//         var dataSplit = data.split("\" ");
+//         //Doesnt work with spotify ?
+//
+//     });
+//
 };
