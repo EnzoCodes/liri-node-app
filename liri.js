@@ -36,16 +36,15 @@ switch (arr) {
 
 
 function tweets(){
-    console.log("step one")
     // statuses/user_timeline
     keys.twitterKeys.get('statuses/user_timeline', { screen_name: 'enzo_cnop', count: 20 }, function(error, tweets, res){
-        // console.log(tweets[0].text);
+        console.log(tweets[0].text);
             if (error) {
                 console.log(error);
             }
             if (!error) {
-                for(i = 0; i <= 20; i++){
-                    console.log("Tweet " + (i+1)   + ": " + JSON.stringify(tweets[i]));
+                for(i = 0; i < 20; i++){
+                    console.log("Tweet " + (i+1)   + ": " + tweets[i].text);
             }
         }
     })
