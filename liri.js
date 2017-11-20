@@ -2,10 +2,10 @@ var keys = require("./keys.js");
 
 var request = require("request");
 // var twitreq = require("twitter");
-var twitterKeys = require("./keys.js").twitterKeys;
+// var twitterKeys = require("./keys.js").twitterKeys;
 // var spotreq = require("node-spotify-api");
 // var spotKeys = new spotreq(keys.spotifyKeys);
-var spotKeys = require("./keys.js").spotifyKeys;
+// var spotKeys = require("./keys.js").spotifyKeys;
 
 var fs = require("fs");
 
@@ -13,7 +13,7 @@ var fs = require("fs");
 var arr = process.argv[2];
 
 switch (arr) {
-    case "my-tweets":
+    case "tweets":
     console.log("tweet tweet");
     tweets();
     break;
@@ -36,13 +36,20 @@ switch (arr) {
 
 
 function tweets(){
-    // statuses/show/:id
-    //twitter .get()
-    twitterKeys.get('favorites/list', function(tweets, res){
-        console.log(tweets);
-        console.log(res);
-    });
-}
+    console.log("step one")
+    // statuses/user_timeline
+    keys.twitterKeys.get('statuses/user_timeline', { screen_name: 'enzo_cnop', count: 20 }, function(error, tweets, res){
+        // console.log(tweets[0].text);
+            if (error) {
+                console.log(error);
+            }
+            if (!error) {
+                for(i = 0; i <= 20; i++){
+                    console.log("Tweet " + (i+1)   + ": " + JSON.stringify(tweets[i]));
+            }
+        }
+    })
+};
 
 function spotify(){
 //   Artist(s)
