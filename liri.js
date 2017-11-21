@@ -1,3 +1,6 @@
+var globalCommand;
+var globalInput;
+
 var keys = require("./keys.js");
 
 var request = require("request");
@@ -86,26 +89,17 @@ function spotify(){
                             + "\n Url: " + JSON.stringify(data.tracks.items[0].external_urls.spotify, null, 2) + "\n";
 
                 console.log(sInfo);
-                // fs.append()
+
+                var fs = require("fs");
+                fs.appendFile("log.txt", sInfo + "\n", function(data){
+
+                });
             });
         }
 }; //End Spotify stuff
 
-// https.get(dir, function (response){
-//   var str = '';
-//   response.setEncoding('utf8');
-//   response.on('data', function (data){
-//     str += data;
-//   });
-//   response.on('end', function (){
-//     var jObj = JSON.parse(str);
-//     console.log(jObj);
-//   });
-// })
-
-
-
 function movie(){
+    var movieData;
 
     if(process.argv[3] === undefined) {
         movieName = "Mr. Nobody";
@@ -129,22 +123,49 @@ function movie(){
         console.log("Language: " + JSON.parse(body).Language);
         console.log("Short Plot: " + JSON.parse(body).Plot);
         console.log("Actors: " + JSON.parse(body).Actors + "\n");
+
+        // Storing to append...
+        movieData = "\n Title: " + JSON.parse(body).Title
+        + "Released: " + JSON.parse(body).Year
+        + "IMDB Rating: " + JSON.parse(body).imdbRating
+        + "Rotten Tomatoes Rating: " + JSON.parse(body).Ratings[1].Value
+        + "Country: " + JSON.parse(body).Country
+        + "Language: " + JSON.parse(body).Language
+        + "Short Plot: " + JSON.parse(body).Plot
+        + "Actors: " + JSON.parse(body).Actors + "\n";
+
+        var fs = require("fs");
+        fs.appendFile("log.txt", movieData + "\n", function(data){
+
+        });
       }
+
     });
 };
 
 function doIt(){
-    console.log("This feature is under development...sorry mate.");
-//     fs.readFile("searchData.txt", "utf8," function(error, data){
-//         if (error) {
-//             console.log("Something went wrong!");
-//             return console.log(error);
-//         }
-//
-//         console.log(data);
-//         var dataSplit = data.split("\" ");
-//         //Doesnt work with spotify ?
-//
-//     });
-//
+
+    fs.readFile("random.txt", "utf8", function(error, data){
+
+        if (error) {
+            console.log("Something went wrong!");
+            return console.log(error);
+        }
+
+        var dataSplit = data.split(",");
+
+
+        globalCommand = dataSplit[0];
+        globalInput = dataSplit[1];
+
+        if (globalCommand === "tweets"){
+            tweets();
+        } else if (globalCommand === "spotify") {
+            // This doesn't work... reads as no input...
+            spotify(globalInput);
+        } else if (globalCommand === "movie-this") {
+            movie(globalInput);
+        }
+
+    });
 };
